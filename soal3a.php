@@ -72,14 +72,6 @@
                     <input type="text" name="nama" id="nama" placeholder="Masukan Nama">
                 </td>
             </tr>
-            <!-- <tr>
-                <td>
-                    <label for="alamat">Alamat : </label>
-                </td>
-                <td>
-                    <input type="text" name="alamat" id="alamat" placeholder="Masukan Alamat">
-                </td>
-            </tr> -->
             <tr>
                 <td>
                     <button type="button" id="btnSrc" name="btnSrc" onclick="searchFunc()">
@@ -108,12 +100,34 @@
                 data: sendData,
                 url: "search.php",
                 success: function(response){
+                    
+                    var responseArray = JSON.parse(response);
+                    var tbody = document.getElementById('searchList').getElementsByTagName('tbody')[0];
+
+                    // Clear existing content in tbody (optional)
+                    tbody.innerHTML = "";
+
+                    // Loop through the array and append each element to the tbody
+                    for (const data of responseArray.data) {
+                        var newRow = document.createElement("tr");
+                        var nama = document.createElement("td");
+                        var alamat = document.createElement("td");
+                        var hobi = document.createElement("td");
+                        
+                        nama.textContent = data.nama || ''; // Handle cases where data.nama is undefined or null
+                        alamat.textContent = data.alamat || '';
+                        hobi.textContent = data.hobi || '';
+
+                        newRow.appendChild(nama);
+                        newRow.appendChild(alamat);
+                        newRow.appendChild(hobi);
+
+                        tbody.appendChild(newRow);
+                    }
+                    console.log(typeof responseArray);
+
                     document.getElementById('listing').classList.add('none');
                     document.getElementById('searchList').classList.remove('none');
-
-                    console.log(response);
-
-
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log(xhr.responseText);
